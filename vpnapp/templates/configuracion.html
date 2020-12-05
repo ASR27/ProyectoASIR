@@ -1,0 +1,10 @@
+{% block content %}
+<p>[Interface]</p>
+<p>Address = {{ object.ip }}</p>
+<p>PrivateKey = temporal</p>
+</br>
+<p>[Peer]</p>
+<p>PublicKey = server key</p>
+<p>AllowedIPs = 10.0.0.0/24</p>
+<p>Endpoint = dominiotemporal:puertotemporal</p>
+{% endblock %}
