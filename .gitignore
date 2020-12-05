@@ -1,5 +1,6 @@
-db.sqlite3
-vpn/__pycache__/
-vpnapp/migrations/
-vpnapp/__pycache__/
+**logs
+/db.sqlite3
+/vpn/__pycache__/
+/vpnapp/migrations/
+/vpnapp/__pycache__/
 
