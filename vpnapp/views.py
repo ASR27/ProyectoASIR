@@ -13,40 +13,6 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 
 from .models import *
 
-# Create your views here.
-
-# class PerfilList(ListView):
-# 	model = Perfil
-# 	template_name="perfillist.html"
-
-# class Configuracion(DetailView):
-# 	model = Perfil
-# 	template_name = "configuracion.html"
-# 	fields = '__all__'
-
-# 	def get_content_data(self, **kwargs):
-# 		context = super().get_content_data(**kwargs)
-# 		return
-
-# class InterfazList(ListView):
-# 	model = Aula
-# 	template_name = "interfazlist.html"
-
-# class InterfazConf(DetailView):
-# 	model = Aula
-# 	template_name = "interfazconf.html"
-# 	fields = '__all__'
-
-
-# 	def get_content_data(self, **kwargs):
-# 		context = super().get_content_data(**kwargs)
-# 		return
-
-# 	def get_context_data(self, *args, **kwargs):
-# 		context = super(InterfazConf, self).get_context_data(*args, **kwargs)
-# 		context["alumnos"] = Perfil.objects.all().values()
-# 		context["conexiones"] = Interfaz.objects.all().values()
-# 		return context
 
 class ConexionList(ListView):
 	model = Conexion
