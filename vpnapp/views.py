@@ -8,10 +8,17 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required,user_passes_test
-# from rest_framework import viewsets, permissions
-# from rest_framework.permissions import IsAdminUser
+from rest_framework import viewsets, permissions
+from rest_framework.permissions import IsAdminUser
+from vpnapp.serializers import PerfilSerializer, AulaSerializer, ConexionSerializer
 
 from .models import *
+
+##############################
+
+# Vistas
+
+##############################
 
 
 class ConexionList(ListView):
@@ -45,3 +52,24 @@ class AulaDetail(DetailView):
 		context["cperfil"] = Perfil.objects.all().values()
 		context["cconexion"] = Conexion.objects.all().values()
 		return context
+
+###############################
+
+# API
+
+###############################
+
+class PerfilAPI(viewsets.ModelViewSet):
+	queryset = Perfil.objects.all()
+	serializer_class = PerfilSerializer
+	permission_classes = [permissions.IsAuthenticated]
+
+class AulaAPI(viewsets.ModelViewSet):
+	queryset = Aula.objects.all()
+	serializer_class = AulaSerializer
+	permission_classes = [permissions.IsAuthenticated]
+
+class ConexionAPI(viewsets.ModelViewSet):
+	queryset = Conexion.objects.all()
+	serializer_class = ConexionSerializer
+	permission_classes = [permissions.IsAuthenticated]

@@ -20,6 +20,7 @@ class Aula(models.Model):
 	serverprivkey = models.CharField(max_length=200)
 	endpoint = models.CharField(max_length=200)
 	port = models.IntegerField()
+	subred = models.GenericIPAddressField(protocol='IPv4')
 	clientes = models.ManyToManyField(Perfil, through='Conexion')
 
 	def __str__(self):

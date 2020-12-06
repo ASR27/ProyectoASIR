@@ -11,7 +11,7 @@
 			{% if temp.interfaz_id == object.id %}
 
 				<p>[Peer]</p>
-				<p>Address = {{ temp.ip }}</p>
+				<p>AllowedIPs = {{ object.subred }}/24</p>
 				<p>PublicKey = {{ alumno.pubkey }}</p>
 
 			{% endif %}
