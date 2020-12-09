@@ -9,7 +9,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from rest_framework import viewsets, permissions
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from vpnapp.serializers import PerfilSerializer, AulaSerializer, ConexionSerializer
 
 from .models import *
@@ -62,14 +64,32 @@ class AulaDetail(DetailView):
 class PerfilAPI(viewsets.ModelViewSet):
 	queryset = Perfil.objects.all()
 	serializer_class = PerfilSerializer
-	permission_classes = [permissions.IsAuthenticated]
+	authentication_classes = [SessionAuthentication, BasicAuthentication]
+	permission_classes = [permissions.IsAuthenticated,]
 
-class AulaAPI(viewsets.ModelViewSet):
+	def get_queryset(self):
+		queryset = self.queryset
+		query_set = queryset.filter(pk=self.request.user.id)
+		return query_set
+
+class AulaAPI(viewsets.ReadOnlyModelViewSet):
 	queryset = Aula.objects.all()
 	serializer_class = AulaSerializer
-	permission_classes = [permissions.IsAuthenticated]
+	authentication_classes = [SessionAuthentication, BasicAuthentication]
+	permission_classes = [permissions.IsAuthenticated,]
 
-class ConexionAPI(viewsets.ModelViewSet):
+	def get_queryset(self):
+		queryset = self.queryset
+		query_set = queryset.filter(clientes=self.request.user.id)
+		return query_set
+
+class ConexionAPI(viewsets.ReadOnlyModelViewSet):
 	queryset = Conexion.objects.all()
 	serializer_class = ConexionSerializer
-	permission_classes = [permissions.IsAuthenticated]
+	authentication_classes = [SessionAuthentication, BasicAuthentication]
+	permission_classes = [permissions.IsAuthenticated,]
+
+	def get_queryset(self):
+		queryset = self.queryset
+		query_set = queryset.filter(alumno=self.request.user.id)
+		return query_set
