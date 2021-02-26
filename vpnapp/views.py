@@ -76,12 +76,12 @@ class AulaAPI(viewsets.ReadOnlyModelViewSet):
 	queryset = Aula.objects.all()
 	serializer_class = AulaSerializer
 	authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [permissions.IsAuthenticated,]
+	permission_classes = [permissions.IsAdminUser,]
 
-	def get_queryset(self):
-		queryset = self.queryset
-		query_set = queryset.filter(clientes=self.request.user.id)
-		return query_set
+	# def get_queryset(self):
+	# 	queryset = self.queryset
+	# 	query_set = queryset.filter(clientes=self.request.user.id)
+	# 	return query_set
 
 class ConexionAPI(viewsets.ReadOnlyModelViewSet):
 	queryset = Conexion.objects.all()

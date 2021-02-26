@@ -9,13 +9,20 @@ class PerfilSerializer(serializers.ModelSerializer):
 		fields = ['id','pubkey']
 
 class AulaSerializer(serializers.ModelSerializer):
+	clientes = PerfilSerializer(many=True)
+
 	class Meta:
 		model = Aula
-		fields = ['id','nombre','serverpubkey','endpoint','clientes']
+		fields = ['id','nombre','serverip','subred','port','serverpubkey','serverprivkey','endpoint','clientes']
+
+class AulaParcialSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Aula
+		fields = ['id','nombre','serverip','subred','port','serverpubkey','endpoint','clientes']
 
 class ConexionSerializer(serializers.ModelSerializer):
 	alumno = PerfilSerializer()
-	interfaz = AulaSerializer()
+	interfaz = AulaParcialSerializer()
 
 	class Meta:
 		model = Conexion

@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import signals
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 
+import os
 # Create your models here.
 
 class Perfil(models.Model):
@@ -37,3 +39,12 @@ class Conexion(models.Model):
 
 	def __str__(self):
 		return str(self.ip + " - " + self.alumno.user.username + " - " + self.interfaz.nombre)
+
+
+###########################################################################################
+#Ruta del fichero actualizado.py temporal
+###########################################################################################
+
+@receiver(signals.post_save, sender=Perfil)
+def actualizar(sender, instance, created, **kwargs):
+	os.system("python3 /home/asr/actualizado.py")
