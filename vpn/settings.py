@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import ldap
+from django_auth_ldap.config import LDAPSearch
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -127,3 +129,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# ldap
+
+AUTH_LDAP_SERVER_URI = 'ldap://127.0.0.1:10389'
+
+AUTH_LDAP_BIND_DN = 'cn=admin,dc=planetexpress,dc=com'
+AUTH_LDAP_BIND_PASSWORD = 'GoodNewsEveryone'
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    'ou=people,dc=planetexpress,dc=com',
+    ldap.SCOPE_SUBTREE,
+    '(cn=%(user)s)',
+)
+
+
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)

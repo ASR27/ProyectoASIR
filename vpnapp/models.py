@@ -15,6 +15,15 @@ class Perfil(models.Model):
 	def __str__(self):
 		return str(self.user.username)
 
+@receiver(post_save, sender=User)
+def create_user_perfil(sender, instance, created, **kwargs):
+	if created:
+		Perfil.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def sace_user_perfil(sender, instance, **kwargs):
+	instance.perfil.save()
+
 class Aula(models.Model):
 	nombre = models.CharField(max_length=10)
 	serverip = models.GenericIPAddressField(protocol='IPv4')

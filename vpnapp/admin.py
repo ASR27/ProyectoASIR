@@ -13,7 +13,8 @@ class PerfilInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
 	inlines = (PerfilInline,)
 
-admin.site.register(Aula)
-admin.site.register(Conexion)
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(Aula)
+admin.site.register(Conexion)
