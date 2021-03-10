@@ -1,14 +1,8 @@
-import json, os, os.path
-
-###########################################################################################
-#Todas las rutas de ficheros son temporales
-###########################################################################################
-
-#Leemos el usuario y contraseña del fichero de credenciales
+import json, os, os.path, requests
 
 creden = []
 
-with open('/home/asr/credenciales', 'r') as cred:
+with open('/home/webuser/credencialesserver', 'r') as cred:
 	for line in cred:
 		clean = line.rstrip()
 		creden.append(clean)
@@ -19,20 +13,24 @@ contraseña = creden[1]
 #Consultamos la API y almacenamos los datos en un fichero que usaremos temporalmente
 #Si el fichero existe, se borra antes de consultar la API para garantizar que no quedan datos antiguos
 
-if os.path.isfile('/home/asr/aulasauto'):
-	os.remove('/home/asr/aulasauto')
-os.system("http -a " + usuario + ":" + contraseña + " GET 10.0.20.1:8000/aulas/ >> /home/asr/aulasauto")
+if os.path.isfile('/home/webuser/aulasauto'):
+	os.remove('/home/webuser/aulasauto')
+
+r = requests.get('https://albertoasir.duckdns.org/aulas', auth=(usuario,contraseña))
+with open('/home/webuser/aulasauto', 'w') as file:
+	file.write(r.text)
 
 #Leemos del fichero temporal los datos con los que generaremos nuestros ficheros de configuración de wireguard
-#Con esto creamos en el servidor un fichero de configuración por cada taller disponible
-	#en el que incluimos a todos los alumnos conectados
 
-with open('/home/asr/aulasauto') as json_file:
+#Con esto creamos en el servidor un fichero de configuración por cada taller disponible
+#en el que incluimos a todos los alumnos conectados
+
+with open('/home/webuser/aulasauto') as json_file:
 	data = json.load(json_file)
 	for p in data:
-		f = open('/home/asr/' + str(p['nombre']) + 'server.conf', 'w')
+		f = open('/home/webuser/' + str(p['nombre']) + 'server.conf', 'w')
 		f.close()
-		g = open('/home/asr/' + str(p['nombre']) + 'server.conf', 'w')
+		g = open('/home/webuser/' + str(p['nombre']) + 'server.conf', 'w')
 		g.write('[Interface]\n')
 		g.write('Address =' + str(p['serverip']) + '\n')
 		g.write('PrivateKey = ' + str(p['serverprivkey']) + '\n')
@@ -44,8 +42,11 @@ with open('/home/asr/aulasauto') as json_file:
 			g.write('AllowedIPs = ' + str(p['subred']) + '/24' + '\n')
 			g.write('\n')
 		g.close()
+		#Actualizamos la interfaz en caliente sin cortar la conexión
+		os.system('sudo wg-quick strip /etc/wireguard/' + str(p['nombre']) + 'server.conf > /home/webuser/' + str(p['nombre']) + 'server.conf.strip')
+		os.system('sudo wg syncconf < /home/webuser/' + str(p['nombre']) + 'server.conf.strip')
 
 #Una vez creados los ficheros de configuración, eliminamos el fichero temporal
 
-if os.path.isfile('/home/asr/aulasauto'):
-	os.remove('/home/asr/aulasauto')
+if os.path.isfile('/home/webuser/aulasauto'):
+	os.remove('/home/webuser/aulasauto')
